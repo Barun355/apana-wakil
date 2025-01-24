@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Upload } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { Input } from "../../ui/Input";
 import { Button } from "../../ui/button";
 import { signUp } from "../../../lib/auth";
 import { globalState } from "../../../store/store";
 import useReducerPlus from "../../../hooks/useReducerPlus";
-import { Role } from "../../../lib/types";
+import { option } from "framer-motion/client";
 
 interface SignUpFormProps {
-  userType: "client" | "lawyer";
+  userType: "client" | "lawyer" | "";
   gLogin: any;
 }
 
@@ -40,9 +40,10 @@ export const SignUpForm = ({ userType, gLogin }: SignUpFormProps) => {
     password: "",
   });
 
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Sign up:", formData);
+    console.log("Sign up 47:", userType);
     // Add sign up logic here
     if (formData.password !== formData.confirmPassword) {
       alert("Password doesnt match.");
@@ -52,14 +53,16 @@ export const SignUpForm = ({ userType, gLogin }: SignUpFormProps) => {
       update({
         isLoading: true,
       });
-      const [data, err] = await signUp({
+      const options = {
         email: formData.email,
         password: formData.password,
-        role: state.role,
+        role: userType.toUpperCase(),
         firstName: formData.name.split(" ")[0],
         lastName: formData.name.split(" ")[1],
-      });
-      console.log(`Sign Up: ${data}`);
+      }
+      console.log(option)
+      const [data, err] = await signUp(options);
+      console.log(`Sign Up 64: ${data}`);
       if (err) {
         update({
           error: err.message,
@@ -82,20 +85,21 @@ export const SignUpForm = ({ userType, gLogin }: SignUpFormProps) => {
         isLoading: false,
       });
 
-      setFormData({
-        name: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        phone: "",
-        address: "",
-        ...(userType === "lawyer" && {
-          practiceArea: "",
-          experience: "",
-          barLicenseNumber: "",
-          photo: null as File | null,
-        }),
-      });
+      // setFormData({
+      //   name: "",
+      //   email: "",
+      //   password: "",
+      //   confirmPassword: "",
+      //   phone: "",
+      //   address: "",
+      //   ...(userType === "lawyer" && {
+      //     practiceArea: "",
+      //     experience: "",
+      //     barLicenseNumber: "",
+      //     photo: null as File | null,
+      //   }),
+      // });
+
     }
   };
 

@@ -24,7 +24,7 @@ export const SignUp = () => {
     role: Role.CLIENT,
     password: "",
   });
-
+  
   const createGuser = async () => {
     try {
       if (!guser) {

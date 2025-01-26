@@ -11,25 +11,20 @@ import { signIn } from "../../../lib/auth";
 export const SignInForm = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    role: "",
-  });
 
-  const { set } = globalState();
+  const { set, user } = globalState();
   const [state, update] = useReducerPlus({
     isLoading: false,
     error: "",
     email: "",
-    role: "",
+    role: Role.LAWYER,
     password: "",
   });
 
   useEffect(() => {
-    const data = localStorage.getItem("global");
-    if (data) {
-      if (JSON.parse(data)?.state.user.role === Role.CLIENT) {
+    
+    if (user) {
+      if (user.role === Role.CLIENT) {
         navigate("/client/dashboard");
       } else {
         navigate("/lawyer/dashboard");
@@ -39,17 +34,17 @@ export const SignInForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Sign up:", formData.role);
+    console.log("Sign up:", state.role);
     // Add sign up logic here
     try {
       update({
         isLoading: true,
       });
-      console.log("sigin: ", formData);
+      console.log("sigin: ", state);
       const [data, err] = await signIn({
-        email: formData.email,
-        password: formData.password,
-        role: formData.role !== "" ? formData.role.toUpperCase(): Role.LAWYER,
+        email: state.email,
+        password: state.password,
+        role: state.role,
       });
       console.log(`Sign In: ${data}`);
       if (err) {
@@ -87,8 +82,8 @@ export const SignInForm = () => {
         label="Email"
         type="email"
         required
-        value={formData.email}
-        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+        value={state.email}
+        onChange={(e) => update({ email: e.target.value })}
       />
 
       <div className="relative">
@@ -96,9 +91,9 @@ export const SignInForm = () => {
           label="Password"
           type={showPassword ? "text" : "password"}
           required
-          value={formData.password}
+          value={state.password}
           onChange={(e) =>
-            setFormData({ ...formData, password: e.target.value })
+            update({ password: e.target.value })
           }
         />
         <button
@@ -115,14 +110,11 @@ export const SignInForm = () => {
           <input
             type="checkbox"
             className="rounded border-gray-300 text-blue-900 focus:ring-blue-900"
-            checked={formData.role !== Role.CLIENT ? true : false}
+            checked={state.role !== Role.CLIENT ? true : false}
             onChange={(e) => {
-              setFormData({
-                ...formData,
+              update({
                 role: !e.target.checked ? Role.CLIENT : Role.LAWYER,
               });
-              console.log(e.target.checked)
-              console.log(formData.role)
             }}
           />
           <span className="text-sm text-gray-600">As Lawyer</span>

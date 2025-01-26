@@ -6,46 +6,34 @@ import { Button } from "../../ui/button";
 import { signUp } from "../../../lib/auth";
 import { globalState } from "../../../store/store";
 import useReducerPlus from "../../../hooks/useReducerPlus";
-import { option } from "framer-motion/client";
+import { Role } from "../../../lib/types";
 
 interface SignUpFormProps {
-  userType: "client" | "lawyer" | "";
+  role: Role;
   gLogin: any;
 }
 
-export const SignUpForm = ({ userType, gLogin }: SignUpFormProps) => {
+export const SignUpForm = ({ role, gLogin }: SignUpFormProps) => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    phone: "",
-    address: "",
-    ...(userType === "lawyer" && {
-      practiceArea: "",
-      experience: "",
-      barLicenseNumber: "",
-      photo: null as File | null,
-    }),
-  });
 
-  const { set, user } = globalState();
+  const { set } = globalState();
   const [state, update] = useReducerPlus({
     isLoading: false,
+    firstName: '',
+    lastName: '',
     error: "",
     email: "",
-    role: "",
+    role: Role.CLIENT,
     password: "",
+    confirmPassword: '',
   });
 
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Sign up 47:", userType);
     // Add sign up logic here
-    if (formData.password !== formData.confirmPassword) {
+    if (state.password !== state.confirmPassword) {
       alert("Password doesnt match.");
       return;
     }
@@ -54,15 +42,13 @@ export const SignUpForm = ({ userType, gLogin }: SignUpFormProps) => {
         isLoading: true,
       });
       const options = {
-        email: formData.email,
-        password: formData.password,
-        role: userType.toUpperCase(),
-        firstName: formData.name.split(" ")[0],
-        lastName: formData.name.split(" ")[1],
+        email: state.email,
+        password: state.password,
+        role: role,
+        firstName: state.firstName,
+        lastName: state.lastName,
       }
-      console.log(option)
       const [data, err] = await signUp(options);
-      console.log(`Sign Up 64: ${data}`);
       if (err) {
         update({
           error: err.message,
@@ -71,7 +57,6 @@ export const SignUpForm = ({ userType, gLogin }: SignUpFormProps) => {
         update({
           isLoading: false,
         });
-        console.log(err);
         return;
       }
       set({
@@ -85,47 +70,32 @@ export const SignUpForm = ({ userType, gLogin }: SignUpFormProps) => {
         isLoading: false,
       });
 
-      // setFormData({
-      //   name: "",
-      //   email: "",
-      //   password: "",
-      //   confirmPassword: "",
-      //   phone: "",
-      //   address: "",
-      //   ...(userType === "lawyer" && {
-      //     practiceArea: "",
-      //     experience: "",
-      //     barLicenseNumber: "",
-      //     photo: null as File | null,
-      //   }),
-      // });
-
     }
   };
-
-  // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   if (e.target.files?.[0]) {
-  //     setFormData({ ...formData, photo: e.target.files[0] });
-  //   }
-  // };
 
   return (
     <>
       <form onSubmit={handleSubmit} className="space-y-6 w-full max-w-2xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Input
-            label="Name"
+            label="First Name"
             required
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            value={state.firstName}
+            onChange={(e) => update({ firstName: e.target.value })}
+          />
+          <Input
+            label="Last Name"
+            required
+            value={state.lastName}
+            onChange={(e) => update({ lastName: e.target.value })}
           />
           <Input
             label="Email"
             type="email"
             required
-            value={formData.email}
+            value={state.email}
             onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
+              update({ email: e.target.value })
             }
           />
           <div className="relative">
@@ -133,9 +103,9 @@ export const SignUpForm = ({ userType, gLogin }: SignUpFormProps) => {
               label="Password"
               type={showPassword ? "text" : "password"}
               required
-              value={formData.password}
+              value={state.password}
               onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
+                update({ password: e.target.value })
               }
             />
             <button
@@ -150,25 +120,25 @@ export const SignUpForm = ({ userType, gLogin }: SignUpFormProps) => {
             label="Confirm Password"
             type="password"
             required
-            value={formData.confirmPassword}
+            value={state.confirmPassword}
             onChange={(e) =>
-              setFormData({ ...formData, confirmPassword: e.target.value })
+              update({ confirmPassword: e.target.value })
             }
           />
           {/* <Input
             label="Phone Number"
             type="tel"
             required
-            value={formData.phone}
+            value={state.phone}
             onChange={(e) =>
-              setFormData({ ...formData, phone: e.target.value })
+              setstate({ ...state, phone: e.target.value })
             }
           />
           <Input
             label="Address"
-            value={formData.address}
+            value={state.address}
             onChange={(e) =>
-              setFormData({ ...formData, address: e.target.value })
+              setstate({ ...state, address: e.target.value })
             }
           /> */}
 
@@ -177,26 +147,26 @@ export const SignUpForm = ({ userType, gLogin }: SignUpFormProps) => {
               <Input
                 label="Practice Area"
                 required
-                value={formData.practiceArea}
+                value={state.practiceArea}
                 onChange={(e) =>
-                  setFormData({ ...formData, practiceArea: e.target.value })
+                  setstate({ ...state, practiceArea: e.target.value })
                 }
               />
               <Input
                 label="Experience (years)"
                 type="number"
                 required
-                value={formData.experience}
+                value={state.experience}
                 onChange={(e) =>
-                  setFormData({ ...formData, experience: e.target.value })
+                  setstate({ ...state, experience: e.target.value })
                 }
               />
               <Input
                 label="Bar License Number"
                 required
-                value={formData.barLicenseNumber}
+                value={state.barLicenseNumber}
                 onChange={(e) =>
-                  setFormData({ ...formData, barLicenseNumber: e.target.value })
+                  setstate({ ...state, barLicenseNumber: e.target.value })
                 }
               />
               <div>

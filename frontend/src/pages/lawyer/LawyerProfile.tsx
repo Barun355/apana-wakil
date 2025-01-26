@@ -14,6 +14,7 @@ import AvailabilityToggle from "../../components/dashboard/lawyer/LawyerProfile/
 import ProfileCard from "../../components/dashboard/lawyer/LawyerProfile/ProfileCard";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { globalState } from "../../store/store";
 
 interface PersonalInfo {
   email: string;
@@ -35,6 +36,8 @@ const LawyerProfile = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const navigate = useNavigate()
+
+  const { reset } = globalState()
 
   const [personalInfo, setPersonalInfo] = useState<PersonalInfo>({
     email: "chris.evans@legalconnect.com",
@@ -205,7 +208,7 @@ const LawyerProfile = () => {
             )}
             <Button
               color="error"
-              onClick={() => {localStorage.clear(); navigate('/signin')}}
+              onClick={() => {reset()}}
               variant="outlined"
               size="large"
             >

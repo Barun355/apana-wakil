@@ -1,5 +1,5 @@
 import { Scale } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { SignUpForm } from "../components/SignInSignUp/auth/SignUpForm";
 import { Toggle } from "../components/ui/Toggle";
 import useGoogleAuth from "../hooks/googleAuth";
@@ -10,7 +10,6 @@ import { Role } from "../lib/types";
 import { gLoginReq } from "../lib/auth";
 
 export const SignUp = () => {
-  const [userType, setUserType] = useState<"client" | "lawyer">("client");
 
   const { glogin, guser } = useGoogleAuth();
 
@@ -25,40 +24,40 @@ export const SignUp = () => {
     password: "",
   });
   
-  const createGuser = async () => {
-    try {
-      if (!guser) {
-        return;
-      }
-      const accessToken = guser.accessToken;
+  // const createGuser = async () => {
+  //   try {
+  //     if (!guser) {
+  //       return;
+  //     }
+  //     const accessToken = guser.accessToken;
 
-      update({
-        isLoading: true,
-      });
-      const [data, err] = await gLoginReq({ accessToken, role: state?.role });
-      if (err) {
-        update({
-          error: err.message,
-          isLoading: false,
-        });
-        // toast.error(err.message);
-        return;
-      }
-      set({
-        user: data,
-      });
-    } catch (error) {
-      console.log(error)
-    } finally {
-      update({
-        isLoading: false,
-      });
-    }
-  };
+  //     update({
+  //       isLoading: true,
+  //     });
+  //     const [data, err] = await gLoginReq({ accessToken, role: state?.role });
+  //     if (err) {
+  //       update({
+  //         error: err.message,
+  //         isLoading: false,
+  //       });
+  //       // toast.error(err.message);
+  //       return;
+  //     }
+  //     set({
+  //       user: data,
+  //     });
+  //   } catch (error) {
+  //     console.log(error)
+  //   } finally {
+  //     update({
+  //       isLoading: false,
+  //     });
+  //   }
+  // };
 
   useEffect(() => {
     if (user) {
-      user.role?.toLowerCase() === "lawyer" ? navigate("/lawyer/dashboard"): navigate('/client/dashboard');
+      user.role === Role.LAWYER ? navigate("/lawyer/dashboard"): navigate('/client/dashboard');
     }
   }, [user]);
 
@@ -99,14 +98,14 @@ export const SignUp = () => {
             <div className="mt-6 flex justify-center">
               <Toggle
                 options={["Client", "Lawyer"]}
-                selected={userType === "client" ? "Client" : "Lawyer"}
+                selected={state.role === Role.CLIENT ? Role.CLIENT : Role.LAWYER}
                 onChange={(value) =>
-                  setUserType(value.toLowerCase() as "client" | "lawyer")
+                  update({ role: value as Role})
                 }
               />
             </div>
           </div>
-          <SignUpForm userType={userType} gLogin={gLoginReq} />
+          <SignUpForm role={state.role} gLogin={gLoginReq} />
         </div>
       </div>
     </div>

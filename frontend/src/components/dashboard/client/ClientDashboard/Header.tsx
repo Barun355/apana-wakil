@@ -9,6 +9,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { Button } from "@mui/material";
+import { globalState } from "../../../../store/store";
 
 interface HeaderProps {
   userName: string;
@@ -19,6 +20,8 @@ export const Header = ({ userName, notificationCount = 0 }: HeaderProps) => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+
+  const { reset } = globalState()
 
   const navItems = [
     { label: "Home", path: "/client/dashboard" },
@@ -106,7 +109,7 @@ export const Header = ({ userName, notificationCount = 0 }: HeaderProps) => {
                   </Link>
                   <Button
                     onClick={() => {
-                      localStorage.clear();
+                      reset()
                       navigate("/signin");
                     }}
                     className="flex items-center space-x-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full mb-2"

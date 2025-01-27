@@ -2,10 +2,14 @@ import { useState } from 'react';
 import { HearingCalendar } from '../../components/dashboard/lawyer/LawyerCaseManagement/HearingCalendar';
 import { CaseDetails } from '../../components/dashboard/lawyer/LawyerCaseManagement/CaseDetails';
 import { CaseList } from '../../components/dashboard/lawyer/LawyerCaseManagement/CaseList';
+import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 export const LawyerCaseManagement = () => {
   const [selectedCase, setSelectedCase] = useState<string | null>('1');
   const [activeTab, setActiveTab] = useState('list'); // 'list' | 'calendar'
+
+  const navigate = useNavigate()
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">      
@@ -13,6 +17,7 @@ export const LawyerCaseManagement = () => {
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-2xl font-bold text-gray-900">Case Management</h1>
           <div className="flex space-x-4">
+            <Button variant='contained' onClick={() => navigate('/lawyer/dashboard/create-case')}>Create Case</Button>
             <button
               onClick={() => setActiveTab('list')}
               className={`px-4 py-2 rounded-lg transition-all duration-200 ${

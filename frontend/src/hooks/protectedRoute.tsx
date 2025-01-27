@@ -1,11 +1,11 @@
-import { ReactElement, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { globalState } from "../store/store";
 import useReducerPlus from "./useReducerPlus";
 import { Role } from "../lib/types";
 // import BarLoader from "./components/barLoader";
 
-export const RequireAuth = ({ children, role }: { children: ReactElement, role?: Role }) => {
+export const RequireAuth = ({ children, role }: { children: React.ReactNode, role?: Role }) => {
   const { user } = globalState();
   const navigate = useNavigate();
   const [state, update] = useReducerPlus({ isLoading: true });

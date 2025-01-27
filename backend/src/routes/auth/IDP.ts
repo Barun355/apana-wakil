@@ -1,5 +1,5 @@
-// const GCLIENT_ID = "328737459710-7v1p5aone6sfd1cqu0bst5e6o7r0mmh4.apps.googleusercontent.com";
-const GCLIENT_ID = "886210303406-nel1i76kh24lu6rjoangc5o8iqm1mr45.apps.googleusercontent.com";
+const GCLIENT_ID =
+  "328737459710-7v1p5aone6sfd1cqu0bst5e6o7r0mmh4.apps.googleusercontent.com";
 
 export const getGoogleAuthUser = async (accessToken: string) => {
   try {

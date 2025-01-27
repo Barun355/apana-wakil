@@ -13,7 +13,6 @@ import {
 import AvailabilityToggle from "../../components/dashboard/lawyer/LawyerProfile/AvailabilityToggle";
 import ProfileCard from "../../components/dashboard/lawyer/LawyerProfile/ProfileCard";
 import { Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import { globalState } from "../../store/store";
 
 interface PersonalInfo {
@@ -35,7 +34,7 @@ const LawyerProfile = () => {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const navigate = useNavigate()
+  const { user } = globalState()
 
   const { reset } = globalState()
 
@@ -181,8 +180,8 @@ const LawyerProfile = () => {
             }}
           />
         </div>
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">Chris Evans</h1>
-        <p className="text-gray-600 mb-4">Family Law | 8 Years Experience</p>
+        <h1 className="text-3xl font-bold text-gray-800 mb-2">{user?.firstName!} {user?.lastName!}</h1>
+        <p className="text-gray-600 mb-4">{user?.Lawyer?.specialization! || "Family Lawyer"} | {user?.Lawyer?.yoe! || 0} Years Experience</p>
         <div className="flex justify-center">
           <AvailabilityToggle
             isAvailable={isAvailable}
@@ -199,11 +198,11 @@ const LawyerProfile = () => {
           editable
         >
           <div className="space-y-4">
-            {renderEditableField("Email", personalInfo.email, "personal.email")}
-            {renderEditableField("Phone", personalInfo.phone, "personal.phone")}
+            {renderEditableField("Email", user?.email! || personalInfo.email, "personal.email")}
+            {renderEditableField("Phone", user?.phone_number! || personalInfo.phone, "personal.phone")}
             {renderEditableField(
               "Location",
-              personalInfo.location,
+              user?.address! || personalInfo.location,
               "personal.location"
             )}
             <Button
@@ -224,10 +223,10 @@ const LawyerProfile = () => {
         >
           <div className="space-y-4">
             <p>
-              <strong>Specialization:</strong> {professionalInfo.specialization}
+              <strong>Specialization:</strong> {user?.Lawyer?.specialization! || professionalInfo.specialization}
             </p>
             <p>
-              <strong>Bar ID:</strong> {professionalInfo.barId}
+              <strong>Bar ID:</strong> {user?.Lawyer?.bar_association_membership || professionalInfo.barId}
             </p>
             <p>
               <strong>Certifications:</strong> {professionalInfo.certifications}

@@ -1,4 +1,5 @@
 import prisma from "../../lib/prisma";
+import { Role } from "../../types/types";
 
 export const fetchLawyers = async () => {
   try {
@@ -6,7 +7,11 @@ export const fetchLawyers = async () => {
       select: {
         id: true,
         yoe: true,
-        Ratings: true,
+        Ratings: {
+          select:{
+            rating:true,                        
+          }
+        },
         specialization: true,
         consultationFee: true,
         user: {
@@ -23,7 +28,7 @@ export const fetchLawyers = async () => {
   }
 };
 
-export const fetchLawyer = async (id: string) => {
+export const fetchLawyer = async (id: string, role: Role, userId: string) => {
   try {
     const lawyer = await prisma.lawyer.findUnique({
       where: {
@@ -31,21 +36,13 @@ export const fetchLawyer = async (id: string) => {
       },
       select: {
         id: true,
+        profile_description: true,
+        website: true,
         yoe: true,
-        Ratings: true,
         specialization: true,
         consultationFee: true,
         createdAt: true,
-        updatedAt: true,
-        services: {
-          select: {
-            id: true,
-            category: true,
-            description: true,
-            title: true,
-            price: true,
-          },
-        },
+        updatedAt: true,        
         user: {
           select: {
             firstName: true,

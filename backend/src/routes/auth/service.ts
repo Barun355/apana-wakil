@@ -5,10 +5,7 @@ import { sign } from "jsonwebtoken";
 const JWT_SECRET = process.env.JWT_SECRET || "wakeel";
 
 export const signup = async (
-  payload: Pick<
-    UserType,
-    "firstName" | "lastName" | "role" | "email" | "password"
-  >
+  payload: UserType
 ) => {
   try {
     let createdUser;
@@ -141,21 +138,20 @@ export const signin = async (
           lastName: true,
           role: true,
           phone_number: true,
-          Lawyer: true,
           createdAt: true,
           updatedAt: true,
         },
       });
     }
 
-    console.log('sigin: ', JSON.stringify(checkUser))
-
     if (!checkUser?.id) {
       throw new Error("invalid credentials");
     }
     const token = sign(
       {
-        id: checkUser.id,
+        id: `${
+          payload.role == "LAWYER" ? (checkUser as any).Lawyer.id : checkUser.id
+        }`,
         role: checkUser.role,
       },
       JWT_SECRET!

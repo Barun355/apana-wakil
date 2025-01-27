@@ -6,7 +6,8 @@ import { Button } from "../../ui/button";
 import { globalState } from "../../../store/store";
 import useReducerPlus from "../../../hooks/useReducerPlus";
 import { Role } from "../../../lib/types";
-import { signIn } from "../../../lib/auth";
+import { signIn } from "../../../lib/api";
+import { toast } from "react-toastify";
 
 export const SignInForm = () => {
   const navigate = useNavigate();
@@ -22,7 +23,6 @@ export const SignInForm = () => {
   });
 
   useEffect(() => {
-    
     if (user) {
       if (user.role === Role.CLIENT) {
         navigate("/client/dashboard");
@@ -52,10 +52,8 @@ export const SignInForm = () => {
           error: err.message,
           isLoading: false,
         });
-        update({
-          isLoading: false,
-        });
         console.log(err);
+        toast.error(err?.message)
         return;
       }
       set({
@@ -67,8 +65,9 @@ export const SignInForm = () => {
       } else {
         navigate("/client/dashboard");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
+      toast.error(error?.message )
     } finally {
       update({
         isLoading: false,

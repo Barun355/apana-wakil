@@ -62,7 +62,17 @@ export const fetchLawyerServices = async (id: string) => {
         id: id,
       },
       select: {
-        services: true,
+        services: {
+          select:{
+            id: true,
+            title: true,
+            description: true,
+            category: true,
+            price: true,
+            createdAt: true,
+            updatedAt: true,
+          }
+        },
       },
     });
     return services;

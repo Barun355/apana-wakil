@@ -7,14 +7,14 @@ import authRouter from "./routes/auth/router";
 import serviceRouter from "./routes/services/router";
 import ratingRouter from "./routes/ratings/router";
 import lawyerRouter from "./routes/lawyer/router";
+import appointmentRouter from "./routes/appointments/router";
+import caseRouter from "./routes/case/router";
 
 const app = express();
 
 // app basic configuration using middlewares
 app.use(
-  cors({
-    origin: process.env.CORS_ORIGIN,
-  })
+  cors()
 );
 
 app.use(
@@ -36,6 +36,8 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/service", serviceRouter);
 app.use("/api/v1/rating", ratingRouter);
 app.use("/api/v1/lawyers", lawyerRouter);
+app.use("/api/v1/cases", caseRouter)
+app.use("/api/v1/appointment",appointmentRouter);
 
 // Testing Connection route
 app.get("/api/v1", (req: any, res: any) => {

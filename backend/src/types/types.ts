@@ -10,10 +10,10 @@ export interface UserType {
   lastName: string;
   email: string;
   password: string;
-  phone_number: string;
-  address: string;
-  addhar_number: string;
-  profile: string;
+  phone_number?: string;
+  address?: string;
+  addhar_number?: string;
+  profile?: string;
   createdAt?: Date;
   updatedAt?: Date;
   Lawyer?: {
@@ -24,35 +24,42 @@ export interface UserType {
     bar_association_membership?: string;
     consultationFee?: number;
     website?: string;
+    id?: string;
   };
 }
 
-export interface LawyerDetailsType {
-  id: string;
-  yoe: number;
-  Ratings: Array<{
-    id: string;
-    client_id: string;
-    rating: number;
-    description: string;
-  }>;
-  specialization: string;
-  consultationFee: number;
-  createdAt: Date;
-  updatedAt: Date;
-  services: Array<{
-    id: string;
-    category: string;
-    description: string;
-    title: string;
-    price: number;
-  }>;
-  user: {
+export interface AppointmentsType {
+  id?: string;
+  userId: string;
+  client_id?: string;
+  lawyer_id?: string;
+  description: string;
+  date: Date;
+  status?: APPOINTMENT_STATUS;
+  createdAt?: Date;
+  updatedAt?: Date;
+  role?: Role;
+  client?: {
     firstName: string;
     lastName: string;
     email: string;
-    address: string;
+    phone_number: string;
   };
+  lawyer?: {
+    user: {
+      firstName: string;
+      lastName: string;
+      email: string;
+      phone_number: string;
+    };
+  };
+}
+
+enum APPOINTMENT_STATUS {
+  PENDING = "PENDING",
+  CONFIRMED = "CONFIRMED",
+  COMPLETED = "COMPLETED",
+  CANCELED = "CANCELED",
 }
 
 export interface AuthResponse {
@@ -73,10 +80,91 @@ export interface ServiceType {
   userId?: string;
 }
 
+export interface LawyerDetailsType {
+  id: string;
+  profile_description: string;
+  website: string;
+  yoe: number; // Years of Experience
+  Ratings: Rating[]; // Array of ratings
+  specialization: string;
+  consultationFee: number;
+  createdAt: Date;
+  updatedAt: Date;
+  Appointments?: AppointmentsType[]; // Appointments is optional and conditionally included
+  services: ServiceType[];
+  user: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    address: string;
+  };
+}
+
 export interface Rating {
-  id?: string;
-  lawyerId: string;
-  clientId: string;
-  description: string;
   rating: number;
+  client_id: string;
+  lawyer_id: string;
+  description: string;
+  id: string;
+}
+
+export interface CaseType {
+  id?: string;
+  title: string;
+  description?: string;
+  status: CASE_STATUS;
+  createdAt: string;
+  updateAt: string;
+  client: {
+    client_id: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    phone_number?: string;
+  };
+  lawyer: {
+    lawyer_id: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    phone_number?: string;
+  };
+  hearings: HearingType[];
+  timeline: TimelineType[];
+}
+
+export interface TimelineType {
+  id?: string;
+  case_id: string;
+  lawyer_id: string;
+  client_id: string;
+  title: string;
+  description: string;
+  status: TIME_LINE_STATUS;
+  createdAt?: Date;
+}
+
+export interface HearingType {
+  id?: string;
+  case_id?: string;
+  client_id: string;
+  status: HEARING_STATUS;
+  lawyer_id: string;
+}
+
+export enum HEARING_STATUS {
+  UPCOMING = "UPCOMING",
+  CLOSED = "CLOSED",
+}
+
+export enum TIME_LINE_STATUS {
+  ACTIVE = "ACTIVE",
+  CLOSED = "CLOSED",
+  ONGOING = "ONGOING",
+}
+
+export enum CASE_STATUS {
+  ACTIVE = "ACTIVE",
+  CLOSED = "CLOSED",
+  ONGOING = "ONGOING",
 }

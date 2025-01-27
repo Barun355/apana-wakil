@@ -17,8 +17,7 @@ export const LawyerHeader = () => {
     { label: "Dashboard", path: "/lawyer/dashboard" },
     { label: "My Cases", path: "/lawyer/dashboard/cases" },
     { label: "Service Requests", path: "/lawyer/dashboard/requests" },
-    { label: "Appointments", path: "/lawyer/dashboard/appointments" },
-    { label: "Profile Settings", path: "/lawyer/dashboard/profile" },
+    { label: "Appointments", path: "/lawyer/dashboard/appointments" }
   ];
 
   return (

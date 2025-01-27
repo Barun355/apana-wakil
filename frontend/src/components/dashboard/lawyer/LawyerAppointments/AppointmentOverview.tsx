@@ -1,11 +1,11 @@
 import { Calendar, CheckCircle, XCircle, Clock } from 'lucide-react';
 
-export const AppointmentOverview = () => {
+export const AppointmentOverview = ({ totalRequest, accepted, rejected, pending }: { totalRequest: number, accepted: number, rejected: number, pending: number}) => {
   const stats = [
-    { label: 'Total Requests', value: 24, icon: Calendar, color: 'blue' },
-    { label: 'Accepted', value: 12, icon: CheckCircle, color: 'green' },
-    { label: 'Rejected', value: 5, icon: XCircle, color: 'red' },
-    { label: 'Pending', value: 7, icon: Clock, color: 'yellow' }
+    { label: 'Total Requests', value: totalRequest, icon: Calendar, color: 'blue' },
+    { label: 'Accepted', value: accepted, icon: CheckCircle, color: 'green' },
+    { label: 'Rejected', value: rejected, icon: XCircle, color: 'red' },
+    { label: 'Pending', value: pending, icon: Clock, color: 'yellow' }
   ];
 
   return (

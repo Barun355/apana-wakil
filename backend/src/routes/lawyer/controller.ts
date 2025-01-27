@@ -24,7 +24,9 @@ export const fetchLawyer = async (
 ): Promise<void> => {
   try {
     const id = req.params.id;
-    const data = await service.fetchLawyer(id);
+    const role = (req as any).role;
+    const userId = (req as any).userId;
+    const data = await service.fetchLawyer(id, role, userId);
     res.json({ data });
   } catch (err) {
     const errorMessage =

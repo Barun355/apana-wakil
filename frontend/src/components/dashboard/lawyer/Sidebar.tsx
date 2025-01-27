@@ -2,7 +2,6 @@ import {
   LayoutDashboard,
   Briefcase,
   UserCheck,
-  User,
   LucideIcon,
   Calendar,
 } from "lucide-react";
@@ -18,12 +17,6 @@ type NavItemTypes = {
 }
 const Sidebar = () => {
   const navItems: NavItemTypes[] = [
-    {
-      slug: "/lawyer/dashboard/Profile",
-      icon: User,
-      label: "Profile",
-      active: false,
-    },
     {
       slug: "/lawyer/dashboard",
       icon: LayoutDashboard,

@@ -1,21 +1,22 @@
 import { Scale } from "lucide-react";
 import { useEffect } from "react";
-import { SignUpForm } from "../components/SignInSignUp/auth/SignUpForm";
 import { Toggle } from "../components/ui/Toggle";
-import useGoogleAuth from "../hooks/googleAuth";
+// import useGoogleAuth from "../hooks/googleAuth";
 import useReducerPlus from "../hooks/useReducerPlus";
 import { globalState } from "../store/store";
 import { useNavigate } from "react-router-dom";
 import { Role } from "../lib/types";
-import { gLoginReq } from "../lib/auth";
+// import { gLoginReq } from "../lib/auth";
+import LawyerOnboarding from "../components/onboarding/LawyerOnboarding";
+import ClientOnBoarding from "../components/onboarding/ClientOnboarding";
 
 export const SignUp = () => {
 
-  const { glogin, guser } = useGoogleAuth();
+  // const { glogin, guser } = useGoogleAuth();
 
   const navigate = useNavigate();
 
-  const { set, user } = globalState();
+  const { user } = globalState();
   const [state, update] = useReducerPlus({
     isLoading: false,
     error: "",
@@ -105,8 +106,16 @@ export const SignUp = () => {
               />
             </div>
           </div>
-          <SignUpForm role={state.role} gLogin={gLoginReq} />
+          {
+            state.role === Role.LAWYER ? (
+              <LawyerOnboarding />
+            ) : (
+              <ClientOnBoarding />
+            )
+          }
         </div>
+
+
       </div>
     </div>
   );

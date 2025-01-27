@@ -19,7 +19,7 @@ export const authMiddleware = (
       throw new Error("unAuthorized");
     }
     (req as any).userId = decoded.id;
-    (req as any).role = decoded.id;
+    (req as any).role = decoded.role;
 
     next();
   } catch (err: any) {

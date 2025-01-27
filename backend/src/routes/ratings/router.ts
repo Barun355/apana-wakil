@@ -7,6 +7,7 @@ const ratingRouter = Router();
 ratingRouter.use(authMiddleware);
 
 ratingRouter.post("/", controller.createRating);
-ratingRouter.delete("/", controller.deleteRating);
+ratingRouter.delete("/:id", controller.deleteRating);
+ratingRouter.get("/",controller.getRatings)
 
 export default ratingRouter;

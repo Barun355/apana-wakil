@@ -13,7 +13,7 @@ interface UserProfile {
   email: string | undefined;
   phone: string | undefined;
   location: string | undefined;
-  joinDate: Date | undefined;
+  joinDate: string | Date | undefined;
   avatar: string | undefined;
 }
 
@@ -25,12 +25,12 @@ interface SettingsSection {
 }
 
 var initialProfile: UserProfile = {
-  name: "John Doe",
-  email: "john.doe@example.com",
-  phone: "+91 98765 43210",
-  location: "Mumbai, India",
-  joinDate: new Date(),
-  avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=200&h=200"
+  name: "",
+  email: "",
+  phone:"",
+  location: "",
+  joinDate: undefined,
+  avatar: "",
 };
 
 export default function Profile() {
@@ -44,11 +44,11 @@ export default function Profile() {
 
   if (user){
     initialProfile = {
-      name: `${user.firstName} + ${user.lastName}`,
+      name: `${user.firstName} ${user.lastName}`,
       avatar: user.profile || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=200&h=200",
       email: user.email,
       location: user.address,
-      joinDate: user.createdAt,
+      joinDate: user.createdAt?.toLocaleString().split('T')[0],
       phone: user.phone_number
     }
   }
@@ -85,7 +85,7 @@ export default function Profile() {
         </div>
         <div>
           <h3 className="text-xl font-semibold text-gray-900">{profile.name}</h3>
-          <p className="text-gray-600">Member since {profile.joinDate}</p>
+          <p className="text-gray-600">Member since {(profile.joinDate as any)}</p>
         </div>
       </div>
 

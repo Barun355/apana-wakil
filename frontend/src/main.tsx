@@ -33,6 +33,8 @@ import ServiceRequestsPage from "./pages/lawyer/ServiceRequestsPage.tsx";
 import { LawyerAppointments } from "./pages/lawyer/LawyerAppointments.tsx";
 import LawyerProfile from "./pages/lawyer/LawyerProfile.tsx";
 import Notifications from "./pages/lawyer/Notification copy.tsx";
+import { ToastContainer } from "react-toastify";
+import LawyerCreateCase from "./pages/lawyer/CreateCase.tsx";
 
 const router = createBrowserRouter([
   {
@@ -41,7 +43,12 @@ const router = createBrowserRouter([
   },
   {
     path: "/signin",
-    element: <SignIn />,
+    element: (
+      <>
+        <SignIn />
+        <ToastContainer />
+      </>
+    ),
   },
   {
     path: "/about-us",
@@ -61,13 +68,19 @@ const router = createBrowserRouter([
   },
   {
     path: "/signup",
-    element: <SignUp />,
+    element: (
+      <>
+        <SignUp />
+        <ToastContainer />
+      </>
+    ),
   },
   {
     path: "/lawyer/dashboard",
     element: (
       <RequireAuth role={Role.LAWYER}>
         <LawyerLayout />
+        <ToastContainer />
       </RequireAuth>
     ),
     children: [
@@ -78,6 +91,10 @@ const router = createBrowserRouter([
       {
         path: "cases",
         element: <LawyerCaseManagement />,
+      },
+      {
+        path: "create-case",
+        element: <LawyerCreateCase />,
       },
       {
         path: "requests",
@@ -102,6 +119,7 @@ const router = createBrowserRouter([
     element: (
       <RequireAuth role={Role.CLIENT}>
         <ClientLayout />
+        <ToastContainer />
       </RequireAuth>
     ),
     children: [
